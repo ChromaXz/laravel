@@ -1,0 +1,9 @@
+composer require laravel/ui
+
+php artisan ui bootstrap --auth
+
+npm run dev
+npm install
+
+atau
+npm install && npm run dev

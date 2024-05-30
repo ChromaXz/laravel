@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JenisProdukController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\KartuController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\UserController;
+
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -27,9 +35,52 @@ Route::get('/daftar_nilai', function(){
     return view('nilai.daftar_nilai');
 });
 
-Route::get('/dashboard', function(){
-    return view('admin.dashboard');
+// Route::get('/dashboard', function(){
+//     return view('admin.dashboard');
+//
+// });
+
+
+//batasi middleware, yang berguna sebagai pembatas atau validasi antara visitor yang
+//sudah memiliki user akses dan belum memiliki akses
+Route::group(['middleware' => ['auth', 'checkActive','role:admin|manager|staff']], function(){//fungsi login dan register
+    //untuk auth, checkactive dan role itu terapat pada controller midleware yang ada, perhatikan baik baik
+
+
+
+// route memanggil conroller setiap fungsi
+//prefix and grouping adalah mengelompokkan routing ke satu jenis route
+Route::prefix('admin')->group(function(){
+    Route::get('/user', [UserController::class, 'index']);
+
+    Route::post('/user/{user}/activate', [UserController::class, 'activate'])->name('admin.user.activate');
+    Route::get('/profile', [UserController::class, 'showProfile']);
+    //route by name adalah routing yang diberikan penamaan untuk kemudian dipanggil di link
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    //route memanggil controller setiap fungsi
+    // nanti linknya menggunakan url, ada di dalam view
+Route::get('/jenis_produk', [JenisProdukController::class, 'index']);
+Route::post('/jenis_produk/store', [JenisProdukController::class, 'store']);
+//Route::post('/jenis_produk/create', [JenisProdukController::class, 'store']);
+
+//route dengan pemanggilan class
+Route::resource('produk', ProdukController::class);
+Route::resource('pelanggan', PelangganController::class);
+
+Route::get('/kartu', [KartuController::class, 'index']);
+Route::post('/kartu/store', [KartuController::class, 'store']);
 });
+
+});
+
+
+
+
+
+
+
+
+
 
 
 
@@ -41,3 +92,7 @@ Route::get('/dashboard', function(){
 //4. anggota tidak perlu install laravel, melainkan melakukan git clone terhadap repository
 //5. setelah cloning lakukan composer install didalam command prompt
 //6. collaborate mentor
+//ngecek keseluruhan--->  php artisan route:list
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
