@@ -34,7 +34,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
+                            <img src="{{ asset('storage/fotos/'. $user->foto) }}" alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                             <div class="mt-3">
                                 <h4>{{ $user->name }}</h4>
                                 <p class="text-secondary mb-1">{{ $user->role }}</p>
@@ -70,12 +70,21 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
+                        <form action="{{ url('admin/profile/'.$user->id) }}" method="POST" enctype="multipart/form-data">
+                            @method('PATCH')
+                            @csrf
+                        
                         <div class="row mb-3">
                             <div class="col-sm-3">
                                 <h6 class="mb-0">Full Name</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="{{ $user->name }}">
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $user->name }}" required_autocomplete="name">
+                                @error('name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -83,9 +92,61 @@
                                 <h6 class="mb-0">Email</h6>
                             </div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="{{ $user->email }}">
+                                <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}" required_autocomplete="name">
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Old Password</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="password" class="form-control @error('old_password') is-invalid @enderror" name="old_password">
+                                @error('old_password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">New Password</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="">
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Konfirmasi Password</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="password" class="form-control" name="password_confirmation" value="">
+                                
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Foto</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <input type="file" class="form-control" name="foto" value="{{ $user->foto }}">
+                                
+                            </div>
+                        </div>
+                        @if(Auth::user()->role == 'admin')
 
                         <div class="row mb-3">
                             <div class="col-sm-3">
@@ -95,30 +156,17 @@
                                 <input type="text" class="form-control" value="{{ $user->role }}">
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Mobile</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="(320) 380-4539">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-3">
-                                <h6 class="mb-0">Address</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                                <input type="text" class="form-control" value="Bay Area, San Francisco, CA">
-                            </div>
-                        </div>
+                        @endif
+                        
                         <div class="row">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9 text-secondary">
-                                <input type="button" class="btn btn-primary px-4" value="Save Changes">
+                                <input type="submit" class="btn btn-primary px-4" value="Update Profile">
                             </div>
                         </div>
                     </div>
                 </div>
+                
                 <!--<div class="row">
                     <div class="col-sm-12">
                         <div class="card">
@@ -149,6 +197,7 @@
                     </div>
                 </div>-->
             </div>
+        </form>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JenisProdukController;
 use App\Http\Controllers\ProdukController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\UserController;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
+Route::get('/', [BerandaController::class, 'index']);
 
 Route::get('/', function(){
     return view('front.home');
@@ -55,6 +57,8 @@ Route::prefix('admin')->group(function(){
 
     Route::post('/user/{user}/activate', [UserController::class, 'activate'])->name('admin.user.activate');
     Route::get('/profile', [UserController::class, 'showProfile']);
+    Route::patch('profile/{id}', [UserController::class, 'update']);
+    //patch atau put dua syntax yang sama untuk digunakan sebagai pengubah data
     //route by name adalah routing yang diberikan penamaan untuk kemudian dipanggil di link
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     //route memanggil controller setiap fungsi
