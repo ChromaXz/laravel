@@ -15,10 +15,11 @@ use App\Http\Controllers\UserController;
 //    return view('welcome');
 //});
 Route::get('/', [BerandaController::class, 'index']);
+Route::get('add-to-cart/{id}', [BerandaController::class, 'addToCart'])->name('add.to.cart');
 
-Route::get('/', function(){
-    return view('front.home');
-});
+//Route::get('/', function(){
+    //return view('front.home');
+//});
 //contoh routing untuk mengarahkan ke view, tanpa melalui controller
 Route::get('/percobaan_pertama', function(){
     return view('hello');
