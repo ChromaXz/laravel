@@ -16,6 +16,8 @@ use App\Http\Controllers\UserController;
 //});
 Route::get('/', [BerandaController::class, 'index']);
 Route::get('add-to-cart/{id}', [BerandaController::class, 'addToCart'])->name('add.to.cart');
+Route::get('/detail_cart/{id}', [BerandaController::class, 'detail']);
+Route::get('/shop_cart', [BerandaController::class, 'cart']);
 
 //Route::get('/', function(){
     //return view('front.home');
